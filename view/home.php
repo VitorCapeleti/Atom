@@ -193,6 +193,7 @@ include('../view/php/compartilhar_artigos.php');
     </div>
 </div>
 
+<script src="../view/js/pesquisaCompartilhar.js"></script>
   
     
 
