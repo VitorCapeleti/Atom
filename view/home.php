@@ -160,11 +160,14 @@ include('../view/php/compartilhar_artigos.php');
     <div class="compartilhar-conteudo">
         <h1>Compartilhe a publicação com quem você conhece</h1>
         <br>
+        <input type="hidden" id="token-artigo" name="token_artigo">
+
         <div class="linha-compartilhar">
             <input class="pesquisa-compartilhar" type="text" placeholder="Pessoas com quem você quer compartilhar...">
         </div>
         <br>
-        
+        <div class="usuarios-selecionados"></div> <!-- Onde os usuários selecionados vão aparecer -->
+
         <!-- Verifica se há usuários para exibir -->
         <?php if (count($usuariosConversa) > 0): ?>
             <ul class="lista-sugestao">
@@ -185,16 +188,31 @@ include('../view/php/compartilhar_artigos.php');
                 <?php endif; ?>
             </ul>
         
+            <script>// Adiciona o evento de clique ao botão 'Compartilhar'
+document.querySelectorAll('.openCompartilhar').forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Pega o token do artigo que foi armazenado no atributo 'data-token'
+        const tokenArtigo = this.getAttribute('data-token');
+        
+        // Aqui você pode armazenar o token no campo do formulário ou no botão de compartilhamento
+        // Exemplo: Definir um campo oculto com o token
+        document.querySelector('#token-artigo').value = tokenArtigo;
+        
+        // Abre o popup de compartilhar (caso necessário)
+        document.getElementById('compartilhar').style.display = 'block';
+    });
+});
+</script>
         
         <div class="compartilhar-footer">
             <button id="fecharCompartilhar" class="cancelar-btn">Cancelar</button>
-            <button class="compartilhar-btn">Compartilhar</button>
+            <button class="compartilhar-btn" data-artigo-id="<?= $artigo['ID_ARTIGO']; ?>">Compartilhar</button>
         </div>
     </div>
 </div>
 
 <script>
-    document.querySelector('.pesquisa-compartilhar').addEventListener('input', function() {
+document.querySelector('.pesquisa-compartilhar').addEventListener('input', function() {
     const query = this.value.trim();
     const listaSugestoes = document.querySelector('.lista-sugestao');
     
@@ -226,9 +244,38 @@ include('../view/php/compartilhar_artigos.php');
 
                         // Ao clicar no usuário, adiciona à seleção
                         li.addEventListener('click', function() {
-                            document.querySelector('.pesquisa-compartilhar').value = usuario.USU_VAR_NAME;
-                            listaSugestoes.innerHTML = ''; // Limpar sugestões
-                            // Armazenar o ID do usuário selecionado
+                            // Limpa a pesquisa
+                            document.querySelector('.pesquisa-compartilhar').value = ''; 
+                            listaSugestoes.innerHTML = ''; // Limpa as sugestões
+
+                            // Cria uma nova linha fixa com o nome do usuário selecionado
+                            const usuarioSelecionado = document.createElement('li');
+                            usuarioSelecionado.classList.add('user-linha', 'selecionado'); // Adiciona a classe selecionado
+                            usuarioSelecionado.setAttribute('data-usuario-id', usuario.USU_INT_ID);
+
+                            const imgSelecionado = document.createElement('img');
+                            imgSelecionado.src = usuario.USU_VAR_IMGPERFIL || '../view/img/user.jpg'; // Se não houver imagem, usa a padrão
+                            imgSelecionado.alt = 'Profile';
+
+                            const nomeSelecionado = document.createElement('span');
+                            nomeSelecionado.textContent = usuario.USU_VAR_NAME;
+
+                            // Cria o botão para remover o usuário da seleção
+                            const btnRemover = document.createElement('button');
+                            btnRemover.textContent = 'Remover';
+                            btnRemover.classList.add('remover-usuario');
+                            btnRemover.addEventListener('click', function() {
+                                usuarioSelecionado.remove(); // Remove o usuário selecionado
+                            });
+
+                            usuarioSelecionado.appendChild(imgSelecionado);
+                            usuarioSelecionado.appendChild(nomeSelecionado);
+                            usuarioSelecionado.appendChild(btnRemover);
+
+                            // Adiciona a linha de usuário selecionado ao container de seleção
+                            document.querySelector('.usuarios-selecionados').appendChild(usuarioSelecionado);
+
+                            // Armazenar o ID do usuário selecionado no botão de "Compartilhar"
                             document.querySelector('.compartilhar-btn').setAttribute('data-usuario-id', usuario.USU_INT_ID);
                         });
 
@@ -268,6 +315,10 @@ include('../view/php/compartilhar_artigos.php');
         }
     }
 });
+
+
+
+
 
 </script>
   

@@ -708,6 +708,7 @@ color: #d10000;
     display: flex;
     justify-content: center;
 }
+/* Estilo para a linha de usuário */
 .user-linha {
     padding: 10px;
     display: flex;
@@ -715,22 +716,35 @@ color: #d10000;
     border-bottom: 1px solid #ccc;
     cursor: pointer;
 }
-.user-linha:hover{
+
+/* Quando o usuário passa o mouse por cima, muda a cor do fundo */
+.user-linha:hover {
     background-color: #ccc;
 }
+
+/* Remove a borda inferior do último item da lista */
 .user-linha:last-child {
     border-bottom: none;
 }
-.user-linha img{
+
+/* Imagem do usuário */
+.user-linha img {
     border-radius: 50%;
-            margin-right: 10px;
-            width: 40px;
-            height: 40px;
-        
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
 }
-.user-linha span{
+
+/* Nome do usuário */
+.user-linha span {
     font-size: 20px;
 }
+
+/* Cor de fundo do item selecionado, igual ao hover */
+.user-linha.selecionado {
+    background-color: #ccc; /* Mesmo fundo do hover */
+}
+
 /* Rodapé com botões */
 .compartilhar-footer {
     display: flex;
@@ -830,6 +844,30 @@ input[type="date"], .input-data {
 input[type="date"]:focus, .input-data:focus {
     border-bottom: 2px solid #8c52ff;
 }
+.usuario-selecionado {
+    display: flex;
+    align-items: center;
+    background-color: #d3d3d3; /* Fundo cinza */
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.usuario-selecionado span {
+    margin-right: 10px;
+}
+
+.remover-usuario {
+   color: #000000;
+   background-color: #ccc;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 30px;
+    font-size: 20   px;
+}
+
 
 @media(max-width: 800px){
     .hideOnMobile{
